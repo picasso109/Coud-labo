@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+
+{% block title %}Saisie résultats - COUD LABO{% endblock %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 1280px;
+        margin: auto;
+    }
+
+    .header {
+        background: linear-gradient(135deg, #0d6efd, #0a58ca);
+        color: white;
+        padding: 30px;
+        border-radius: 24px;
+        box-shadow: 0 14px 34px rgba(13,110,253,0.18);
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header::after {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        background: rgba(255,255,255,0.08);
+        border-radius: 50%;
+        right: -50px;
+        top: -50px;
+    }
+
+    .header h2 {
+        margin: 0;
+        font-size: 30px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .header p {
+        margin-top: 8px;
+        opacity: 0.95;
+        position: relative;
+        z-index: 2;
+    }
+
+    .form-card {
+        background: white;
+        padding: 30px;
+        border-radius: 24px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    }
+
+    .section-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #0d6efd;
+    }
+
+    .top-fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .field-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #334155;
+        font-size: 14px;
+    }
+
+    input[type="text"],
+    textarea {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid #dbe4f0;
+        border-radius: 12px;
+        outline: none;
+        transition: 0.25s ease;
+        font-size: 15px;
+        background: #f8fafc;
+    }
+
+    textarea {
+        min-height: 90px;
+        resize: vertical;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+        border-color: #0d6efd;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(13,110,253,0.12);
+    }
+
+    .analyse-card {
+        background: linear-gradient(180deg, #ffffff, #f8fbff);
+        border: 1px solid #e2e8f0;
+        border-left: 6px solid #0d6efd;
+        border-radius: 18px;
+        padding: 24px;
+        margin-bottom: 24px;
+        transition: 0.25s ease;
+    }
+
+    .analyse-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(13,110,253,0.08);
+    }
+
+    .analyse-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #0d6efd;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .badge {
+        background: rgba(13,110,253,0.08);
+        color: #0d6efd;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .analyse-fields {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1.5fr;
+        gap: 18px;
+        margin-bottom: 18px;
+    }
+
+    .sub-result-box {
+        background: #f8fafc;
+        border: 1px dashed #cbd5e1;
+        border-radius: 14px;
+        padding: 18px;
+        margin-top: 10px;
+    }
+
+    .sub-result-title {
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 12px;
+        font-size: 15px;
+    }
+
+    .sub-result-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        margin-bottom: 15px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 18px;
+        background: linear-gradient(135deg, #198754, #157347);
+        color: white;
+        border: none;
+        border-radius: 14px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 25px;
+        box-shadow: 0 10px 20px rgba(25,135,84,0.18);
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(25,135,84,0.25);
+    }
+
+    @media (max-width: 768px) {
+        .top-fields,
+        .analyse-fields,
+        .sub-result-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .header h2 {
+            font-size: 24px;
+        }
+
+        .form-card {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="header">
+        <h2>🧪 Saisie des résultats biologiques</h2>
+        <p>Patient : <strong>{{ patient.nom }} {{ patient.prenom }}</strong></p>
+    </div>
+
+    <form method="POST" class="form-card">
+        <div class="section-title">👨‍⚕️ Validation laboratoire</div>
+
+        <div class="top-fields">
+            <div class="field-group">
+                <label>👨‍🔬 Technicien</label>
+                <input type="text" name="technicien" placeholder="Nom du technicien">
+            </div>
+
+            <div class="field-group">
+                <label>👨‍⚕️ Biologiste valideur</label>
+                <input type="text" name="valideur" placeholder="Nom du valideur">
+            </div>
+        </div>
+
+        <div class="section-title">🧾 Résultats des analyses</div>
+
+        {% for demande in demandes %}
+            <div class="analyse-card">
+                <div class="analyse-title">
+                    {{ demande.analyse.nom }}
+                    <span class="badge">Analyse</span>
+                </div>
+
+                <div class="analyse-fields">
+                    <div class="field-group">
+                        <label>Résultat principal</label>
+                        <input type="text" name="resultat_{{ demande.analyse.id }}" placeholder="Ex: 1.25">
+                    </div>
+
+                    <div class="field-group">
+                        <label>Unité</label>
+                        <input type="text" name="unite_{{ demande.analyse.id }}" placeholder="g/L">
+                    </div>
+
+                    <div class="field-group">
+                        <label>Valeur de référence</label>
+                        <input type="text" name="reference_{{ demande.analyse.id }}" placeholder="0.8 - 1.2">
+                    </div>
+                </div>
+
+                <div class="sub-result-box">
+                    <div class="sub-result-title">🧬 Sous-résultats / paramètres détaillés</div>
+
+                    <div class="sub-result-grid">
+                        <div class="field-group">
+                            <label>Sous résultat 1</label>
+                            <input type="text" name="sub_result_1_{{ demande.analyse.id }}" placeholder="Ex: Hémoglobine 13.2">
+                        </div>
+
+                        <div class="field-group">
+                            <label>Sous résultat 2</label>
+                            <input type="text" name="sub_result_2_{{ demande.analyse.id }}" placeholder="Ex: Leucocytes 5400">
+                        </div>
+
+                        <div class="field-group">
+                            <label>Sous résultat 3</label>
+                            <input type="text" name="sub_result_3_{{ demande.analyse.id }}" placeholder="Ex: Plaquettes 220000">
+                        </div>
+
+                        <div class="field-group">
+                            <label>Sous résultat 4</label>
+                            <input type="text" name="sub_result_4_{{ demande.analyse.id }}" placeholder="Autre paramètre">
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label>📝 Interprétation / commentaire</label>
+                        <textarea name="commentaire_{{ demande.analyse.id }}" placeholder="Commentaire biologique, conclusion, anomalies, observation..."></textarea>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="submit-btn">
+            ✅ Valider et générer le bulletin officiel
+        </button>
+    </form>
+</div>
+{% endblock %}

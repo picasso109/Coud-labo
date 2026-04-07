@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Patients en attente de résultats{% endblock %}
+
+{% block content %}
+<style>
+    .header{
+        background: linear-gradient(135deg,#0d6efd,#0a58ca);
+        color:white;
+        padding:22px;
+        border-radius:18px;
+        margin-bottom:25px;
+    }
+
+    .table-card{
+        background:white;
+        border-radius:18px;
+        overflow:hidden;
+        box-shadow:0 6px 18px rgba(0,0,0,.06);
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+    }
+
+    th, td{
+        padding:16px;
+        text-align:left;
+    }
+
+    thead{
+        background:#eff6ff;
+    }
+
+    tr{
+        border-top:1px solid #e2e8f0;
+    }
+
+    tr:hover{
+        background:#f8fafc;
+    }
+
+    .badge{
+        padding:6px 10px;
+        border-radius:30px;
+        font-size:12px;
+        font-weight:bold;
+        color:white;
+    }
+
+    .urgent{
+        background:#dc2626;
+    }
+
+    .normal{
+        background:#f59e0b;
+    }
+
+    .recent{
+        background:#16a34a;
+    }
+
+    .btn{
+        text-decoration:none;
+        background:#198754;
+        color:white;
+        padding:8px 12px;
+        border-radius:10px;
+        font-size:14px;
+        font-weight:600;
+    }
+</style>
+
+<div class="header">
+    <h2>🧪 File intelligente des résultats</h2>
+</div>
+
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Priorité</th>
+                <th>Dossier</th>
+                <th>Patient</th>
+                <th>Type</th>
+                <th>Attente</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in patients_data %}
+            <tr>
+                <td>
+                    <span class="badge {{ item.priorite }}">
+                        {% if item.priorite == "urgent" %}
+                            🔴 Urgent
+                        {% elif item.priorite == "normal" %}
+                            🟡 Normal
+                        {% else %}
+                            🟢 Récent
+                        {% endif %}
+                    </span>
+                </td>
+                <td>{{ item.patient.numero_dossier }}</td>
+                <td>{{ item.patient.nom }} {{ item.patient.prenom }}</td>
+                <td>{{ item.patient.type_patient }}</td>
+                <td>{{ item.attente_minutes }} min</td>
+                <td>
+                    <a class="btn" href="{{ url_for('saisir_resultats', patient_id=item.patient.id) }}">
+                        ✍️ Saisir
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

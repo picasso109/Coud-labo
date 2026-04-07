@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+
+{% block title %}Prescription analyses - COUD LABO{% endblock %}
+
+{% block content %}
+<style>
+    .header {
+        background: linear-gradient(135deg, #0d6efd, #0a58ca);
+        color: white;
+        padding: 25px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .header h2 {
+        margin-bottom: 10px;
+        font-size: 28px;
+    }
+
+    .patient-info {
+        line-height: 1.8;
+        opacity: 0.95;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+
+    .search-box {
+        margin-bottom: 20px;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        font-size: 15px;
+    }
+
+    .category-block {
+        margin-bottom: 18px;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .category-header {
+        background: #eff6ff;
+        padding: 16px 18px;
+        font-weight: bold;
+        color: #0d6efd;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .category-content {
+        display: none;
+        padding: 15px;
+        background: white;
+    }
+
+    .category-content.open {
+        display: block;
+    }
+
+    .analyse-item {
+        margin-bottom: 12px;
+        padding: 15px;
+        border: 1px solid #e2e8f0;
+        border-left: 5px solid #0d6efd;
+        border-radius: 12px;
+        background: #f8fafc;
+    }
+
+    .analyse-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .left {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .price {
+        font-weight: bold;
+        color: #198754;
+    }
+
+    .total-box {
+        margin-top: 25px;
+        padding: 20px;
+        border-radius: 14px;
+        background: #e8fff1;
+        border-left: 5px solid #198754;
+        font-size: 20px;
+        font-weight: bold;
+        position: sticky;
+        bottom: 15px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        margin-top: 20px;
+        padding: 15px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #198754, #157347);
+        color: white;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+</style>
+
+<div class="header">
+    <h2>🧪 Prescription des analyses</h2>
+    <div class="patient-info">
+        <strong>Patient :</strong> {{ patient.nom }} {{ patient.prenom }}<br>
+        <strong>Dossier :</strong> {{ patient.numero_dossier }}<br>
+        <strong>Type :</strong> {{ patient.type_patient }}
+    </div>
+</div>
+
+<form method="POST" class="form-card" id="analyseForm">
+
+    <div class="search-box">
+        <input type="text" id="searchAnalyse" placeholder="🔍 Rechercher une analyse...">
+    </div>
+
+    {% set categories = analyses | groupby("categorie") %}
+    {% for categorie, items in categories %}
+        <div class="category-block">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <span>🧬 {{ categorie }}</span>
+                <span>▼</span>
+            </div>
+
+            <div class="category-content">
+                {% for analyse in items %}
+                    {% if patient.type_patient == "externe" %}
+                        {% set prix = analyse.prix_externe %}
+                    {% elif patient.type_patient == "personnel" %}
+                        {% set prix = analyse.prix_personnel %}
+                    {% else %}
+                        {% set prix = analyse.prix_etudiant %}
+                    {% endif %}
+
+                    <div class="analyse-item">
+                        <label class="analyse-label">
+                            <div class="left">
+                                <input
+                                    type="checkbox"
+                                    name="analyses"
+                                    value="{{ analyse.id }}"
+                                    data-price="{{ prix }}"
+                                    class="analyse-check"
+                                >
+                                <div>
+                                    <strong>{{ analyse.nom }}</strong><br>
+                                    <small>{{ analyse.code }}</small>
+                                </div>
+                            </div>
+                            <div class="price">{{ prix }} FCFA</div>
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="total-box">
+        💰 Total : <span id="totalPrice">0</span> FCFA
+    </div>
+
+    <button type="submit" class="submit-btn">
+        🧾 Générer automatiquement la facture
+    </button>
+</form>
+
+<script>
+    const form = document.getElementById("analyseForm");
+    const checks = document.querySelectorAll(".analyse-check");
+    const totalPrice = document.getElementById("totalPrice");
+    const searchInput = document.getElementById("searchAnalyse");
+
+    function updateTotal() {
+        let total = 0;
+        checks.forEach(check => {
+            if (check.checked) {
+                total += Number(check.dataset.price || 0);
+            }
+        });
+        totalPrice.textContent = total.toLocaleString();
+    }
+
+    function toggleCategory(header) {
+        const content = header.nextElementSibling;
+        content.classList.toggle("open");
+    }
+
+    checks.forEach(check => {
+        check.addEventListener("change", updateTotal);
+    });
+
+    searchInput.addEventListener("input", function () {
+        const value = this.value.toLowerCase();
+        document.querySelectorAll(".analyse-item").forEach(item => {
+            const text = item.innerText.toLowerCase();
+            item.style.display = text.includes(value) ? "block" : "none";
+        });
+    });
+
+    form.addEventListener("submit", function(e) {
+        const selected = document.querySelectorAll(".analyse-check:checked");
+        if (selected.length === 0) {
+            e.preventDefault();
+            alert("Veuillez sélectionner au moins une analyse.");
+            return false;
+        }
+    });
+
+    updateTotal();
+</script>
+{% endblock %}

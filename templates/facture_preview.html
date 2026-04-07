@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Facture COUD LABO{% endblock %}
+
+{% block content %}
+<style>
+    .header {
+        background: linear-gradient(135deg, #0d6efd, #0a58ca);
+        color: white;
+        padding: 25px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .header h2 {
+        margin-bottom: 10px;
+        font-size: 28px;
+    }
+
+    .patient-info {
+        line-height: 1.8;
+        opacity: 0.95;
+    }
+
+    .invoice-card {
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+
+    .section-title {
+        font-size: 22px;
+        color: #0d6efd;
+        margin-bottom: 20px;
+        border-left: 5px solid #0d6efd;
+        padding-left: 12px;
+    }
+
+    .analyse-item {
+        padding: 15px;
+        margin-bottom: 12px;
+        border: 1px solid #e2e8f0;
+        border-left: 5px solid #0d6efd;
+        border-radius: 12px;
+        background: #f8fafc;
+    }
+
+    .total-box {
+        margin-top: 25px;
+        padding: 20px;
+        border-radius: 14px;
+        background: #e8fff1;
+        border-left: 5px solid #198754;
+        font-size: 24px;
+        font-weight: bold;
+        color: #157347;
+    }
+
+    .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .btn {
+        text-decoration: none;
+        padding: 14px 18px;
+        border-radius: 12px;
+        font-weight: bold;
+        color: white;
+        transition: 0.25s;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .blue { background: #0d6efd; }
+    .green { background: #198754; }
+    .gray { background: #64748b; }
+
+    @media (max-width: 768px) {
+        .actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="header">
+    <h2>🧾 Facture - {{ patient.nom }} {{ patient.prenom }}</h2>
+    <div class="patient-info">
+        <strong>Dossier :</strong> {{ patient.numero_dossier }}<br>
+        <strong>Type :</strong> {{ patient.type_patient }}
+    </div>
+</div>
+
+<div class="invoice-card">
+    <div class="section-title">🧪 Analyses prescrites</div>
+
+    {% for analyse in analyses %}
+        <div class="analyse-item">
+            <strong>{{ analyse.nom }}</strong><br>
+            <small>{{ analyse.code }} — {{ analyse.categorie }}</small>
+        </div>
+    {% endfor %}
+
+    <div class="total-box">
+        💰 Total : {{ total }} FCFA
+    </div>
+
+    <div class="actions">
+        <a class="btn blue" href="{{ url_for('facture_pdf', patient_id=patient.id) }}">
+            📄 Télécharger la facture PDF
+        </a>
+
+        <a class="btn green" href="{{ url_for('saisir_resultats', patient_id=patient.id) }}">
+            🧪 Saisir les résultats labo
+        </a>
+
+        <a class="btn gray" href="{{ url_for('dashboard') }}">
+            ⬅️ Retour au dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

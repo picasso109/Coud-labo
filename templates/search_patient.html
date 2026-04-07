@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}Recherche patient - COUD LABO{% endblock %}
+
+{% block content %}
+<style>
+    .search-header {
+        background: linear-gradient(135deg, #0d6efd, #0a58ca);
+        color: white;
+        padding: 25px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .search-header h2 {
+        margin: 0;
+        font-size: 28px;
+    }
+
+    .search-card {
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        margin-bottom: 25px;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 280px;
+        padding: 14px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        font-size: 15px;
+        outline: none;
+    }
+
+    .search-input:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+    }
+
+    .search-btn {
+        padding: 14px 20px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #0d6efd, #0a58ca);
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .patient-card {
+        background: white;
+        border-radius: 18px;
+        padding: 22px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        margin-bottom: 20px;
+        border-left: 5px solid #0d6efd;
+    }
+
+    .patient-name {
+        font-size: 22px;
+        font-weight: bold;
+        color: #0f172a;
+        margin-bottom: 8px;
+    }
+
+    .patient-meta {
+        color: #64748b;
+        margin-bottom: 18px;
+    }
+
+    .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .btn {
+        text-decoration: none;
+        padding: 12px 16px;
+        border-radius: 10px;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        transition: 0.25s;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .blue { background: #0d6efd; }
+    .green { background: #198754; }
+    .purple { background: #6f42c1; }
+    .orange { background: #fd7e14; }
+
+    .empty-box {
+        background: white;
+        border-radius: 18px;
+        padding: 40px;
+        text-align: center;
+        color: #94a3b8;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+
+    @media (max-width: 768px) {
+        .actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="search-header">
+    <h2>🔍 Recherche patient</h2>
+</div>
+
+<div class="search-card">
+    <form method="POST" class="search-form">
+        <input
+            type="text"
+            name="query"
+            class="search-input"
+            placeholder="Nom, prénom, dossier, téléphone"
+            value="{{ query }}"
+        >
+        <button type="submit" class="search-btn">Rechercher</button>
+    </form>
+</div>
+
+{% if patients %}
+    {% for patient in patients %}
+        <div class="patient-card">
+            <div class="patient-name">
+                👤 {{ patient.nom }} {{ patient.prenom }}
+            </div>
+
+            <div class="patient-meta">
+                📁 Dossier : <strong>{{ patient.numero_dossier }}</strong><br>
+                📞 Téléphone : {{ patient.telephone }}<br>
+                🏷️ Type : {{ patient.type_patient }}
+            </div>
+
+            <div class="actions">
+                <a class="btn blue" href="{{ url_for('historique_patient', patient_id=patient.id) }}">
+                    📂 Historique
+                </a>
+
+                <a class="btn green" href="{{ url_for('facture_pdf', patient_id=patient.id) }}">
+                    📄 Facture PDF
+                </a>
+
+                <a class="btn purple" href="{{ url_for('resultats_pdf', patient_id=patient.id) }}">
+                    🧪 Résultats PDF
+                </a>
+
+                <a class="btn orange" href="{{ url_for('saisir_resultats', patient_id=patient.id) }}">
+                    ✍️ Saisir résultats
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="empty-box">
+        🔎 Aucun patient trouvé. Lance une recherche avec un nom, dossier ou téléphone.
+    </div>
+{% endif %}
+{% endblock %}

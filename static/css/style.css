@@ -1,0 +1,123 @@
+body {
+    background: #eef2f7;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+/* =========================
+   HEADER INSTITUTIONNEL
+========================= */
+.dashboard-header {
+    background: linear-gradient(135deg, #0b3d91, #1b5fc6);
+    color: white;
+    padding: 25px 30px;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-left: 8px solid #f4c542;
+    margin-bottom: 25px;
+}
+
+.dashboard-header h1 {
+    font-size: 34px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+
+.dashboard-header p {
+    font-size: 17px;
+    opacity: 0.95;
+}
+
+/* =========================
+   ACTION BAR
+========================= */
+.action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.btn-action {
+    padding: 14px 22px;
+    border-radius: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    transition: 0.3s ease;
+    font-size: 15px;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    opacity: 0.92;
+}
+
+.btn-primary { background: #0d6efd; }
+.btn-dark { background: #1f2937; }
+.btn-success { background: #198754; }
+.btn-warning { background: #fd7e14; }
+.btn-info { background: #0dcaf0; color: #000; }
+.btn-purple { background: #6f42c1; }
+.btn-danger { background: #dc3545; }
+
+/* =========================
+   KPI CARDS ADMIN
+========================= */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+    border-top: 5px solid #0b5ed7;
+    transition: 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-card h3 {
+    font-size: 18px;
+    color: #0b5ed7;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.stat-card .value {
+    font-size: 42px;
+    font-weight: 800;
+    color: #111827;
+}
+
+/* =========================
+   SIDEBAR ETAT
+========================= */
+.sidebar {
+    background: linear-gradient(180deg, #0b3d91, #1b5fc6);
+    color: white;
+    border-right: 4px solid #f4c542;
+}
+
+.sidebar a {
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: block;
+    padding: 14px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.sidebar a:hover {
+    background: rgba(255,255,255,0.18);
+}

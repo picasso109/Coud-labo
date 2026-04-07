@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Registre des Patients - COUD LABO{% endblock %}
+
+{% block content %}
+<style>
+    .header {
+        background: linear-gradient(135deg, #0d6efd, #0a58ca);
+        color: white;
+        padding: 22px 25px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 28px;
+    }
+
+    .toolbar {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .search-box {
+        flex: 1;
+        min-width: 280px;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 13px 15px;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        font-size: 15px;
+    }
+
+    .table-card {
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: #eff6ff;
+    }
+
+    th {
+        padding: 16px;
+        text-align: left;
+        font-size: 14px;
+        color: #1e293b;
+    }
+
+    td {
+        padding: 16px;
+        border-top: 1px solid #e2e8f0;
+        vertical-align: middle;
+    }
+
+    tr:hover {
+        background: #f8fafc;
+    }
+
+    .badge {
+        padding: 6px 10px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .etudiant {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    .personnel {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .externe {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .btn-action {
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        color: white;
+    }
+
+    .blue { background: #0d6efd; }
+    .green { background: #198754; }
+    .purple { background: #6f42c1; }
+
+    @media (max-width: 900px) {
+        .table-card {
+            overflow-x: auto;
+        }
+    }
+</style>
+
+<div class="header">
+    <h1>📋 Registre Administratif des Patients</h1>
+</div>
+
+<div class="toolbar">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="🔍 Rechercher par dossier, nom, prénom ou téléphone...">
+    </div>
+</div>
+
+<div class="table-card">
+    <table id="patientsTable">
+        <thead>
+            <tr>
+                <th>N° Dossier</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Type</th>
+                <th>Téléphone</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for patient in patients %}
+            <tr>
+                <td><strong>{{ patient.numero_dossier }}</strong></td>
+                <td>{{ patient.nom }}</td>
+                <td>{{ patient.prenom }}</td>
+                <td>
+                    <span class="badge {{ patient.type_patient }}">
+                        {{ patient.type_patient }}
+                    </span>
+                </td>
+                <td>{{ patient.telephone }}</td>
+                <td>{{ patient.created_at.strftime('%d/%m/%Y') }}</td>
+                <td>
+                    <div class="actions">
+                        <a class="btn-action blue" href="{{ url_for('patient_analyses', patient_id=patient.id) }}">
+                            🧪 Analyses
+                        </a>
+                        <a class="btn-action green" href="{{ url_for('historique_patient', patient_id=patient.id) }}">
+                            📜 Historique
+                        </a>
+                        <a class="btn-action purple" href="{{ url_for('saisir_resultats', patient_id=patient.id) }}">
+                            📄 Résultats
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+const searchInput = document.getElementById("searchInput");
+const table = document.getElementById("patientsTable");
+const rows = table.querySelectorAll("tbody tr");
+
+searchInput.addEventListener("keyup", function() {
+    const value = this.value.toLowerCase();
+
+    rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(value) ? "" : "none";
+    });
+});
+</script>
+{% endblock %}

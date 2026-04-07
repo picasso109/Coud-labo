@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Validation biologiste{% endblock %}
+
+{% block content %}
+<style>
+    .header{
+        background:linear-gradient(135deg,#6f42c1,#5b21b6);
+        color:white;
+        padding:22px;
+        border-radius:18px;
+        margin-bottom:25px;
+        box-shadow:0 8px 18px rgba(111,66,193,.18);
+    }
+
+    .table-card{
+        background:white;
+        border-radius:18px;
+        overflow:hidden;
+        box-shadow:0 6px 18px rgba(0,0,0,.06);
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+    }
+
+    th, td{
+        padding:16px;
+        text-align:left;
+        vertical-align:top;
+    }
+
+    thead{
+        background:#f3e8ff;
+    }
+
+    tr{
+        border-top:1px solid #e2e8f0;
+    }
+
+    .analyse-item{
+        margin-bottom:8px;
+        padding:8px 10px;
+        background:#faf5ff;
+        border-radius:10px;
+        border-left:4px solid #8b5cf6;
+    }
+
+    .btn{
+        text-decoration:none;
+        background:#6f42c1;
+        color:white;
+        padding:8px 12px;
+        border-radius:10px;
+        font-size:14px;
+        font-weight:600;
+        display:block;
+        margin-bottom:8px;
+        text-align:center;
+        transition:0.25s ease;
+    }
+
+    .btn:hover{
+        background:#5b21b6;
+        transform:translateY(-1px);
+    }
+
+    .empty-box{
+        padding:30px;
+        text-align:center;
+        color:#64748b;
+        font-size:16px;
+    }
+</style>
+
+<div class="header">
+    <h2>🧬 Validation biologiste par dossier patient</h2>
+</div>
+
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Analyses en attente</th>
+                <th>Technicien</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if patients_groupes %}
+                {% for item in patients_groupes.values() %}
+                <tr>
+                    <td>
+                        <strong>{{ item.patient.nom }} {{ item.patient.prenom }}</strong>
+                    </td>
+
+                    <td>
+                        {% for res in item.resultats %}
+                            <div class="analyse-item">
+                                🧪 <strong>{{ res.analyse }}</strong> : {{ res.valeur }}
+                            </div>
+                        {% endfor %}
+                    </td>
+
+                    <td>{{ item.technicien }}</td>
+
+                    <td>
+                        {% for res in item.resultats %}
+                            <a class="btn"
+                               href="{{ url_for('valider_resultat', resultat_id=res.id) }}">
+                                ✅ Valider {{ loop.index }}
+                            </a>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" class="empty-box">
+                        ✅ Aucun résultat en attente de validation
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
