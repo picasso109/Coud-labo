@@ -22,7 +22,6 @@
             overflow-x:hidden;
         }
 
-        /* halos doux premium */
         .halo{
             position:fixed;
             border-radius:50%;
@@ -58,7 +57,6 @@
             animation-delay:4s;
         }
 
-        /* icônes flottantes plus discrètes */
         .float-icon{
             position:fixed;
             font-size:48px;
@@ -73,7 +71,6 @@
         .micro1{left:5%; bottom:10%;}
         .blood1{right:8%; bottom:12%;}
 
-        /* particules */
         .spark{
             position:fixed;
             width:8px;
@@ -167,6 +164,46 @@
             background:#fff;
         }
 
+        .alert-fasting{
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            color: #b71c1c;
+            border: 2px solid #e53935;
+            border-left: 8px solid #c62828;
+            padding: 20px;
+            margin: 22px 0;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 6px 18px rgba(229,57,53,0.25);
+            animation: pulseAlert 1.5s infinite;
+            line-height: 1.7;
+        }
+
+        .confirm-box{
+            margin: 18px 0 8px 0;
+            padding: 16px;
+            border-radius: 14px;
+            background: rgba(239, 246, 255, 0.9);
+            border: 1px solid #bfdbfe;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e3a8a;
+            line-height: 1.5;
+        }
+
+        .confirm-box input[type="checkbox"]{
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #2563eb;
+            margin: 0;
+            flex-shrink: 0;
+        }
+
         .btn{
             width:100%;
             margin-top:22px;
@@ -224,38 +261,21 @@
             50%{box-shadow:0 0 0 14px rgba(96,165,250,0);}
         }
 
+        @keyframes pulseAlert{
+            0%,100%{transform:scale(1);}
+            50%{transform:scale(1.02);}
+        }
+
         @media(max-width:768px){
-            body{
-                padding:12px;
-            }
-
-            .header{
-                padding:18px;
-                border-radius:20px;
-            }
-
-            .header h2{
-                font-size:21px;
-            }
-
-            .card{
-                padding:18px;
-                border-radius:20px;
-            }
-
-            input{
-                padding:14px;
-                font-size:16px;
-            }
-
-            .btn{
-                padding:15px;
-                font-size:15px;
-            }
-
-            .float-icon{
-                font-size:38px;
-            }
+            body{padding:12px;}
+            .header{padding:18px; border-radius:20px;}
+            .header h2{font-size:21px;}
+            .card{padding:18px; border-radius:20px;}
+            input{padding:14px; font-size:16px;}
+            .btn{padding:15px; font-size:15px;}
+            .float-icon{font-size:38px;}
+            .alert-fasting{font-size:15px; padding:16px;}
+            .confirm-box{font-size:14px; padding:14px;}
         }
     </style>
 </head>
@@ -314,6 +334,19 @@
                     <input type="file" name="bulletin" accept="image/*" required>
                 </div>
             </div>
+
+            <div class="alert-fasting">
+                🚨 IMPORTANT : Pour les analyses sanguines, vous devez être <strong>à jeun pendant 8 heures</strong> avant votre rendez-vous.
+                <br>
+                ❌ Ne mangez pas et ne buvez aucune boisson (café, lait, jus, soda).
+                <br>
+                ✅ <strong>Seule l’eau est autorisée.</strong>
+            </div>
+
+            <label class="confirm-box">
+                <input type="checkbox" required>
+                ✅ J’ai compris que je dois rester à jeun 8 heures avant la prise de sang
+            </label>
 
             <button class="btn" type="submit">
                 ✅💖 Valider mon rendez-vous avec sérénité
